@@ -105,9 +105,9 @@ def rkskalar(f, u0, T, abc, h):
   return (uv, tv)
 
 def f(x,t):
-  a=0.001
-  g=100
-  return a*x*(g-x)
+  k=1
+  b=0.1
+  return np.array([ x[1] , -b*x[1]-k*x[0] ])
   
   
 x0=0
@@ -118,10 +118,10 @@ n=1000
 
 t=np.linspace(t0,te,n)
 
-h=1#1,2,5,10,20
+h=0.25#0.25,0.1,0.05
 
 
-abc=rk.rkkoeff("rk4")
+abc=rk.rkkoeff("k38")
 
 
 x,t=rkskalar(f,x0,[t0,te],abc,h)
