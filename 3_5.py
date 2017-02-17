@@ -59,7 +59,7 @@ def rkskalar(f, u0, T, abc, h):
   uv = u0.T
   
   t = t0
-  u = u0
+  u = u0[0]
   
   d=abc.shape
   
@@ -86,7 +86,8 @@ def rkskalar(f, u0, T, abc, h):
       z=0
       for j in range(0,i):
 	z+=A[i][j]*k[j]
-      k[i]=f(t+c[i]*h,u0+h*z)
+      k[i]=f(t+c[i]*h,
+	     [u0[0]+h*z,u0[1]+z*h])
       
     #phi(t+h,t,y)=y+h* z[i=1][s](b_i*k_i)
   
@@ -110,7 +111,7 @@ def f(x,t):
   return np.array([ x[1] , -b*x[1]-k*x[0] ])
   
   
-x0=0
+x0=[0,0]
 
 t0=0
 te=100
@@ -123,15 +124,13 @@ h=0.25#0.25,0.1,0.05
 
 abc=rk.rkkoeff("k38")
 
+#x=odeint(f,x0,[t0,te])
+#plt.plot(t,x[:,0],label="Odeint")
+
 
 x,t=rkskalar(f,x0,[t0,te],abc,h)
 plt.plot(t,x[:,0],label="Runge-Kutta")
 
-x,t=collatz(f,x0,[t0,te],h)
-plt.plot(t,x[:,0],label="Collatz")
-
-x,t=euler(f,x0,[t0,te],h)
-plt.plot(t,x[:,0],label="Euler")
 
 plt.legend()
 plt.show()
